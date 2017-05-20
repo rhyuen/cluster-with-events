@@ -1,0 +1,14 @@
+{
+  "name": "eventsourcing",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "dependencies": {
+    "cluster": "^0.7.7",
+    "express": "^4.15.3",
+    "http": "^0.0.0",
+    "nodemon": "^1.11.0",
+    "os": "^0.1.1",
+    "request": "^2.81.0"
+  }
+}
