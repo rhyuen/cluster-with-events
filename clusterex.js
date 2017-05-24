@@ -1,15 +1,12 @@
 "use strict";
 
 const cluster = require("cluster");
-const http = require("http");
 const numCPUs = require("os").cpus().length;
-const express = require("express");
-
 
 if(cluster.isMaster){
-    require("os").cpus().map((item) => {
-        console.log(item);
-    });
+    // require("os").cpus().map((item) => {
+    //     console.log(item);
+    // });
 
     console.log(`Master ${process.pid} is running.`);
 
@@ -17,8 +14,25 @@ if(cluster.isMaster){
         cluster.fork();
     }
 
+    for(const id in cluster.workers){
+        cluster.workers[id].on("message", (msg) => {
+            
+            console.log(msg.cmd);
+            console.log(msg.sender);
+            console.log(msg.message);
+        });
+    }
+
+    cluster.on("message", (worker) => {
+        console.log("Received message from worker.");        
+    });
+
     cluster.on("online", (worker) => {
         console.log(`Worker ${worker.process.pid} is online`);
+    });
+
+    cluster.on("listening", (address) => {
+        console.log("Worker listening on %s", address);
     });
 
     cluster.on("exit", (worker, code, signal) => {
@@ -26,19 +40,7 @@ if(cluster.isMaster){
         console.log("Starting new worker.");
         cluster.fork();
     });
+    
 }else{
-    // http.createServer((req, res) => {
-    //     res.writeHead(200);
-    //     res.end(`${process.pid}`);
-    // }).listen(8000);
-    // console.log(`Worker ${process.pid} started.`);
-
-    let app = express();
-    app.set("PORT", process.env.PORT || 9090);
-    app.use((req, res) => {
-        res.status(200).send(`PROCESS ${process.pid} is listening to all incoming requests.`);
-    });
-    app.listen(app.get("PORT"), () => {
-        console.log("LISTEN on PORT %s.", app.get("PORT"));
-    });
+    require("./worker.js");
 }

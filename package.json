@@ -3,10 +3,16 @@
   "version": "1.0.0",
   "main": "index.js",
   "license": "MIT",
+  "scripts": {
+    "start": "nodemon clusterex.js"
+  },
   "dependencies": {
     "cluster": "^0.7.7",
     "express": "^4.15.3",
     "http": "^0.0.0",
+    "mongoose": "^4.10.2",
+    "morgan": "^1.8.1",
+    "nconf": "^0.8.4",
     "nodemon": "^1.11.0",
     "os": "^0.1.1",
     "request": "^2.81.0"
