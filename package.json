@@ -4,9 +4,11 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "start": "nodemon clusterex.js"
+    "start": "nodemon clusterex.js",
+    "perf": "node performance_test/httprequests.js"
   },
   "dependencies": {
+    "body-parser": "^1.17.2",
     "cluster": "^0.7.7",
     "express": "^4.15.3",
     "http": "^0.0.0",

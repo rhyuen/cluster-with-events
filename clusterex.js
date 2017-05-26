@@ -30,10 +30,7 @@ if(cluster.isMaster){
     cluster.on("online", (worker) => {
         console.log(`Worker ${worker.process.pid} is online`);
     });
-
-    cluster.on("listening", (address) => {
-        console.log("Worker listening on %s", address);
-    });
+    
 
     cluster.on("exit", (worker, code, signal) => {
         console.log(`Worker ${worker.process.pid} died with ${code} and ${signal}.`);
