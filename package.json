@@ -4,12 +4,15 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "start": "nodemon clusterex.js",
-    "perf": "node performance_test/httprequests.js"
+    "start": "cross-env NODE_ENV=prod nodemon clusterex.js",
+    "dev": "cross-env NODE_ENV=dev nodemon clusterex.js",
+    "perf": "node performance_test/httprequests.js",
+    "clear": ""
   },
   "dependencies": {
     "body-parser": "^1.17.2",
     "cluster": "^0.7.7",
+    "cross-env": "^5.0.0",
     "express": "^4.15.3",
     "http": "^0.0.0",
     "mongoose": "^4.10.2",

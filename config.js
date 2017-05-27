@@ -5,6 +5,11 @@ const nconf = require("nconf");
 nconf.file("keys.json");
 
 module.exports = {
-    db: nconf.get("db") || process.env.db
+    prod:{
+        db: nconf.get("prod:db") || process.env.db
+    },
+    dev: {
+        db: nconf.get("dev:db") || process.env.db
+    }    
 };
 

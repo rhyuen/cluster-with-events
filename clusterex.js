@@ -3,12 +3,8 @@
 const cluster = require("cluster");
 const numCPUs = require("os").cpus().length;
 
-if(cluster.isMaster){
-    // require("os").cpus().map((item) => {
-    //     console.log(item);
-    // });
-
-    console.log(`Master ${process.pid} is running.`);
+if(cluster.isMaster){    
+    console.log(`[M]: ${process.pid} is running in ENV ${process.env.NODE_ENV}.`);
 
     for(let i = 0; i < numCPUs; i++){
         cluster.fork();
@@ -17,24 +13,24 @@ if(cluster.isMaster){
     for(const id in cluster.workers){
         cluster.workers[id].on("message", (msg) => {
             
-            console.log(msg.cmd);
-            console.log(msg.sender);
-            console.log(msg.message);
+            console.log("[M]: " + msg.cmd);
+            console.log("[M]:" + msg.sender);
+            console.log("[M]:" + msg.message);
         });
     }
 
     cluster.on("message", (worker) => {
-        console.log("Received message from worker.");        
+        console.log("[M]: Received message from worker.");        
     });
 
     cluster.on("online", (worker) => {
-        console.log(`Worker ${worker.process.pid} is online`);
+        console.log(`[M]: Worker ${worker.process.pid} is online`);
     });
     
 
     cluster.on("exit", (worker, code, signal) => {
-        console.log(`Worker ${worker.process.pid} died with ${code} and ${signal}.`);
-        console.log("Starting new worker.");
+        console.log(`[M: Worker ${worker.process.pid} died with ${code} and ${signal}.`);
+        console.log("[M]: Starting new worker.");
         cluster.fork();
     });
     
