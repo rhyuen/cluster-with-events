@@ -11,27 +11,22 @@ if(cluster.isMaster){
     }
 
     for(const id in cluster.workers){
-        cluster.workers[id].on("message", (msg) => {
-            
+        cluster.workers[id].on("message", (msg) => {  
+            console.log("[M]: Received message from worker.");            
             console.log("[M]: " + msg.cmd);
             console.log("[M]:" + msg.sender);
             console.log("[M]:" + msg.message);
         });
     }
-
-    cluster.on("message", (worker) => {
-        console.log("[M]: Received message from worker.");        
-    });
-
+    
     cluster.on("online", (worker) => {
-        console.log(`[M]: Worker ${worker.process.pid} is online`);
+        console.log(`[M]: Worker ${worker.process.pid} is online.`);
     });
     
-
     cluster.on("exit", (worker, code, signal) => {
-        console.log(`[M: Worker ${worker.process.pid} died with ${code} and ${signal}.`);
+        console.log(`[M]: Worker ${worker.process.pid} died with ${code} and ${signal}.`);                
         console.log("[M]: Starting new worker.");
-        cluster.fork();
+        cluster.fork();        
     });
     
 }else{
