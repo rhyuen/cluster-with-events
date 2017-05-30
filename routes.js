@@ -3,6 +3,7 @@
 const express = require("express");
 const Event = require("./model/event.js");
 const fs = require("fs");
+const EVENTLOG = "events.txt";
 let router = express.Router();
 
 function logEvent(event, next){
@@ -17,13 +18,17 @@ function logEvent(event, next){
     event_for_db.save((err, saved_event) => {
         if(err){
             console.error(err);
+            next(err);
         }else{
-            console.log("[W] LOG SAVED: %s", saved_event);
-            fs.appendFile("events.txt", JSON.stringify(event) + "\n", (err) =>{
-                if(err)
-                    throw err;
-                console.log("[W %s] Event LOGGED.", process.pid);
-                next();                
+            console.log("[W %s] LOG SAVED: %s", process.pid, saved_event);
+            fs.appendFile(EVENTLOG, JSON.stringify(event) + "\n", (err) =>{
+                if(err){
+                    console.error(err);
+                    next(err);                    
+                }else{
+                    console.log("[W %s] Event LOGGED.", process.pid);
+                    next(null, saved_event);
+                }
             });
         }
     });        
@@ -44,8 +49,12 @@ router.get("/", (req, res) => {
         time: new Date().getTime()
     };
 
-    logEvent(event, () => {
-        res.status(200).send(`PROCESS ${process.pid} is listening to all incoming requests.`);
+    logEvent(event, (err, result) => {
+        if(err){
+            console.log(err);
+        }else{
+            res.status(200).send(`PROCESS ${process.pid} is listening to all incoming requests.`);
+        }        
     });     
 });
 
@@ -79,9 +88,12 @@ router.get("/castvote", (req, res) => {
         time: new Date().getTime()
     };
 
-    logEvent(event, () => {
-        console.log("Voted");
-        res.status(200).send("voted");
+    logEvent(event, (err, result) => {
+        if(err){
+            console.log(err);
+        }else{            
+            res.status(200).send(`Voted for ${result.data}`);
+        }
     });
 });
 
@@ -93,14 +105,18 @@ router.get("/disconnect", (req, res) => {
         id: process.pid,
         time: new Date().getTime()
     };
-    logEvent(disconnect_event, () => {
-        process.exit(0);
-        res.status(200).send(`PROCESS ${process.pid} disconnected.`);
+    logEvent(disconnect_event, (err) => {
+        if(err){
+            console.log(err);
+        }else{
+            process.exit(0);
+            res.status(200).send(`PROCESS ${process.pid} disconnected.`);
+        }        
     });
 });
 
 router.get("/clear", (req, res) => {
-    fs.writeFile("events.txt", "", (err) => {
+    fs.writeFile(EVENTLOG, "", (err) => {
         if(err){
             console.log(err);
         }else{
