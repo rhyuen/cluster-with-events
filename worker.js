@@ -7,6 +7,7 @@ const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
 const config = require("./config.js");
 const routes = require("./routes.js");
+const voting_routes = require("./routes/voting_routes.js");
 const auction_routes = require("./routes/auction_routes.js");
 
 mongoose.connect(config[process.env.NODE_ENV].db, (err) => {
@@ -35,6 +36,7 @@ app.use(logger("dev"));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(routes);
+app.use("/vote", voting_routes);
 app.use("/auction", auction_routes);
 
 app.listen(app.get("PORT"), (err) => {

@@ -1,3 +1,9 @@
 {
-    
+    "name": "es",
+    "alias": {
+
+    },
+    "engines": {
+        "node": "7.0.0"
+    }
 }
