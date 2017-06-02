@@ -1,11 +1,12 @@
 FROM node:alpine
-WORKDIR /app
+WORKDIR /
 #RUN apk add --no-cache packagenamehere
-COPY package.json /app
-RUN npm install && npm cache clean
-COPY ./ ./app
+COPY package.json /
+RUN npm install && npm cache clean --force
+COPY ./ ./
 EXPOSE 9090 9090
 RUN addgroup -S app && adduser -S -g app app
-RUN chown app -R ./app/node_modules
+RUN chown app -R /node_modules
+RUN chown app /events.txt
 USER app
-CMD ["cross-env", "NODE_ENV=prod", "node", "app/clusterex.js"]
+CMD ["npm", "start"]
