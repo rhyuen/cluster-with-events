@@ -1,9 +1,9 @@
 "use strict";
 
 const express = require("express");
-const Event = require("./model/event.js");
 const fs = require("fs");
-const ES = require("./shared/eventsource-log.js");
+const Event = require("../model/event.js");
+const ES = require("../shared/eventsource-log.js");
 const EVENTLOG = "events.txt";
 let router = express.Router();
 
@@ -65,6 +65,10 @@ router.get("/clear", (req, res) => {
             res.status(200).send("EVENTS Cleared " + opRes);
         }
     });
+});
+
+router.get("/smoke", (req, res) => {
+    res.status(200).send("Nothing special.  Docker test.");
 });
 
 module.exports = router;

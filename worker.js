@@ -6,7 +6,7 @@ const cluster = require("cluster");
 const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
 const config = require("./config.js");
-const routes = require("./routes.js");
+const routes = require("./routes/routes.js");
 const voting_routes = require("./routes/voting_routes.js");
 const auction_routes = require("./routes/auction_routes.js");
 

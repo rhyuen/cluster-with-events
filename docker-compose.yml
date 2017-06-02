@@ -1,1 +1,15 @@
 version: "3.1"
+
+services:
+  node:
+    build:
+      context: .
+      args:
+        - NODE_ENV=development
+    command: node server.js
+    ports:
+      -"80:80"
+      -"5858:5858"
+    volumes:
+      - .:/opt/app
+      - NODE_ENV=development
